@@ -1,6 +1,6 @@
 {
   "name": "os-diagral-local",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "origin": "opnsense/os-diagral-local",
   "comment": "Manual Diagral gateway routing",
   "desc": "Scoped TCP 6000 forwarding, native UI and routing API. No alarm commands.",
@@ -14,14 +14,14 @@
   "annotations": {
     "product_id": "os-diagral-local",
     "product_name": "diagral-local",
-    "product_version": "0.1.0",
+    "product_version": "0.1.1",
     "product_tier": "3",
     "product_abi": "26.7",
     "product_arch": "amd64"
   },
   "scripts": {
-    "post-install": "/usr/local/bin/php /usr/local/opnsense/scripts/diagrallocal/register.php add\n/usr/local/etc/rc.d/configd restart\n",
-    "pre-deinstall": "/usr/local/bin/php /usr/local/opnsense/scripts/diagrallocal/register.php remove\n",
+    "post-install": "/usr/local/bin/php /usr/local/opnsense/scripts/diagrallocal/register.php add\n/usr/local/etc/rc.d/configd restart\n/usr/local/etc/rc.d/diagrallocal restart\n",
+    "pre-deinstall": "/usr/local/etc/rc.d/diagrallocal stop\n/usr/local/bin/php /usr/local/opnsense/scripts/diagrallocal/register.php remove\n",
     "post-deinstall": "/usr/local/etc/rc.d/configd restart\n"
   }
 }

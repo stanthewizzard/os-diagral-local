@@ -30,15 +30,18 @@ Future major OPNsense versions or ABI changes require a compatible build/catalog
 
 ## Persistence and removal
 
-Settings are stored in `config.xml` under `OPNsense/DiagralLocal`; routing rules are native NAT/alias configuration. No periodic daemon or startup command is needed to recreate active rules. Package scripts live under `/usr/local/opnsense/scripts/diagrallocal`.
+Settings are stored in `config.xml` under `OPNsense/DiagralLocal`; routing rules are native NAT/alias configuration. Native rules survive reboot. Version 0.1.1 adds the packaged `diagrallocal` guard service, started by a native boot hook. Every ten seconds it checks for direct cloud sessions while Local routing is selected. Only the active CARP node acts; BACKUP and uncertain CARP states never repair. It refreshes the gateway MAC alias when needed and removes only exact gateway-to-public-TCP6000 state IDs after the alias is ready, at most once per minute. Correct local sessions and other devices/ports are excluded. It never changes the selected mode, restarts Home Assistant, or sends alarm commands. Package scripts live under `/usr/local/opnsense/scripts/diagrallocal`.
 
 Removal deliberately preserves the current native rules and settings to avoid an unexpected cloud reconnection. **Select Cloud before uninstalling** if you want to remove the redirection. Remove any manually created restricted SSH entry or compatibility wrapper separately. Existing non-plugin objects must not use the reserved `DIAGRAL_GATEWAY_MAC` / `DIAGRAL_INTERNAL_NETWORKS` aliases or the plugin's rule UUIDs.
 
-High-availability deployment requires the package on every node, synchronized settings/rules and a reachable control endpoint. Failover has not been validated by this release. A single-node installation does not claim automatic failover support.
+High-availability deployment requires the package on every node, identical settings, synchronized native rules, and a CARP control endpoint whose host keys are verified for both owners. The guard runs on both nodes but repairs only on the active node. The observed post-reboot direct-cloud session was recovered; another full reboot with this guard has not yet been tested. Short TCP reconnections can occur.
 
 ## Build
 
-Run `sh build.sh` on the target OPNsense ABI. This produces a local package without installing it. Sign the repository using native `pkg repo` and a private key kept outside the repository. PHP syntax, XML parsing and six selection-policy cases were checked; live menu, authenticated status API and existing consumer continuity were checked without issuing alarm commands. A complete firewall reboot and routing changes through the new UI have not been tested.
+Run `sh build.sh` on the target OPNsense ABI. This produces a local package without installing it. Sign the repository using native `pkg repo` and a private key kept outside the repository. PHP syntax, XML parsing and eighteen routing/network policy cases were checked; live menu, authenticated status API and existing consumer continuity were checked without issuing alarm commands. A complete firewall reboot and routing changes through the new UI have not been tested.
 
 Independent project, not an official Diagral or OPNsense plugin.
 
+## 0.1.1 recovery status
+
+Status now includes `configured_mode`, `active`, `alias_ready`, `direct_cloud_states` and `local_states`. When Local is configured but the gateway alias is missing or direct cloud states exist, `mode` is `unknown`. A confirmed rule does not prove a fresh alarm state; the bridge must still validate actual gateway communication. Guard observations are in `/var/run/diagrallocal-guard.json`, and repairs alone are logged to syslog.

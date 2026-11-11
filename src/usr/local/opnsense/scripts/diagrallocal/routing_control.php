@@ -7,27 +7,8 @@ if (!in_array($action, ['status', 'local', 'cloud'], true)) { exit(64); }
 $lock = fopen('/var/run/diagral-local-routing.lock', 'c');
 if (!flock($lock, LOCK_EX | LOCK_NB)) { exit(75); }
 $id = '8378647a-7145-4854-9194-32e526062df6';
-function mode_now($id) {
-    global $config, $physical, $docker_ip, $interface, $gateway_mac;
-    $configured = false;
-    foreach (($config['nat']['rule'] ?? []) as $r) {
-        if (($r['@attributes']['uuid'] ?? '') === $id && empty($r['disabled'])) {
-            if (($r['target'] ?? '') !== $docker_ip || ($r['interface'] ?? '') !== $interface) return 'unknown';
-            $configured = true;
-        }
-    }
-    if ($configured) {
-        $mac_ok = false;
-        foreach (($config['OPNsense']['Firewall']['Alias']['aliases']['alias'] ?? []) as $alias) {
-            if (($alias['name'] ?? '') === 'DIAGRAL_GATEWAY_MAC' && strtolower(trim($alias['content'] ?? '')) === $gateway_mac) $mac_ok = true;
-        }
-        if (!$mac_ok) return 'unknown';
-    }
-    $nat = shell_exec('/sbin/pfctl -sn 2>/dev/null') ?? '';
-    $dnat = str_contains($nat, 'rdr pass on '.$physical.' inet proto tcp from <DIAGRAL_GATEWAY_MAC>');
-    $snat = str_contains($nat, 'nat on '.$physical.' inet proto tcp from <DIAGRAL_GATEWAY_MAC>');
-    return $configured && $dnat && $snat ? 'local' : (!$configured && !$dnat && !$snat ? 'cloud' : 'unknown');
-}
+require_once(__DIR__.'/routing_policy.php');
+require_once(__DIR__.'/network_policy.php');
 $current = mode_now($id);
 $killed = 0;
 if ($action !== 'status' && $action !== $current) {
@@ -68,4 +49,7 @@ if ($action !== 'status' && $action !== $current) {
     }
     $current = $action;
 }
-echo json_encode(['mode'=>$current, 'states_cleared'=>$killed])."\n";
+$observed=diagral_observe();
+$verified=$current;
+if($current==='local' && (!$observed['alias_ready'] || $observed['cloud_ids'])) $verified='unknown';
+echo json_encode(['mode'=>$verified,'configured_mode'=>$current,'states_cleared'=>$killed,'active'=>$observed['active'],'alias_ready'=>$observed['alias_ready'],'direct_cloud_states'=>count($observed['cloud_ids']),'local_states'=>$observed['local_states']])."\n";

@@ -1,5 +1,6 @@
-1211cf679bf2809aa7bd618b3788afc3cc7144de838a4501239b27f7a7b68318  repository/26.7/FreeBSD-15-amd64/data.pkg
+c25357e35e9d68577686c556508a92b195e080508706c68744399ba7cb6baa33  repository/26.7/FreeBSD-15-amd64/data.pkg
 ca7f091a4f9eccbf537a966a0d4d555cdfc4de34ad5be5c96a12c4485130664c  repository/26.7/FreeBSD-15-amd64/meta
 ca7f091a4f9eccbf537a966a0d4d555cdfc4de34ad5be5c96a12c4485130664c  repository/26.7/FreeBSD-15-amd64/meta.conf
 3cfb961f69fd2ce87e40ab1c5c68e3efe0e306f2aaa2c6f05c6ca08b4d0f6a7f  repository/26.7/FreeBSD-15-amd64/os-diagral-local-0.1.0.pkg
-8baf42ef09841b46523e0d3e018afb7a9901933cbc024fe1e1a9f2860e739e86  repository/26.7/FreeBSD-15-amd64/packagesite.pkg
+3a072866ed20bb914baa58c68b2324f0ff74b08105708827405796040ffbecd8  repository/26.7/FreeBSD-15-amd64/os-diagral-local-0.1.1.pkg
+01ec53fdec5f0b71f9f9b7b34bad297faed5d3ca6c89d4d262c15472731faaa8  repository/26.7/FreeBSD-15-amd64/packagesite.pkg

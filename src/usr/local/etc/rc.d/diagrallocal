@@ -1,0 +1,14 @@
+#!/bin/sh
+# PROVIDE: diagrallocal
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+. /etc/rc.subr
+name=diagrallocal
+rcvar=diagrallocal_enable
+pidfile=/var/run/diagrallocal.pid
+command=/usr/sbin/daemon
+command_args="-p ${pidfile} -f /usr/local/bin/python3 /usr/local/opnsense/scripts/diagrallocal/worker.py"
+procname=/usr/local/bin/python3
+diagrallocal_enable=YES
+load_rc_config "$name"
+run_rc_command "$1"

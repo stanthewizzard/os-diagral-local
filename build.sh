@@ -12,5 +12,6 @@ manifest['deps']={'opnsense':{'origin':'opnsense/opnsense','version':subprocess.
 (root/'manifest.build.json').write_text(json.dumps(manifest))
 (root/'plist').write_text('\n'.join('/'+str(p.relative_to(root/'src')) for p in (root/'src').rglob('*') if p.is_file())+'\n')
 PY
+find src/usr/local/etc/rc.d src/usr/local/etc/rc.syshook.d -type f -exec chmod 755 {} \;
 mkdir -p dist
 pkg create -M manifest.build.json -r src -p plist -o dist
