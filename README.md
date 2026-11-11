@@ -4,7 +4,7 @@
 
 ## Interface
 
-Open **Services → Diagral Local**. Configure the gateway MAC address, the gateway-facing interface and the local bridge IPv4 address. The bridge must listen on TCP 6000 on the same network as that interface.
+Open **Services â†’ Diagral Local**. Configure the gateway MAC address, the gateway-facing interface and the local bridge IPv4 address. The bridge must listen on TCP 6000 on the same network as that interface.
 
 Saving settings does not apply routing. Select **Local** to redirect this gateway's public IPv4 TCP 6000 connections to the bridge. Private/reserved destinations and other source devices are excluded. Select **Cloud** to remove the plugin's rules. Only the matching gateway TCP 6000 states are cleared during a mode change. No mode change occurs during package installation or upgrade.
 
@@ -45,3 +45,7 @@ Independent project, not an official Diagral or OPNsense plugin.
 ## 0.1.1 recovery status
 
 Status now includes `configured_mode`, `active`, `alias_ready`, `direct_cloud_states` and `local_states`. When Local is configured but the gateway alias is missing or direct cloud states exist, `mode` is `unknown`. A confirmed rule does not prove a fresh alarm state; the bridge must still validate actual gateway communication. Guard observations are in `/var/run/diagrallocal-guard.json`, and repairs alone are logged to syslog.
+
+## 0.1.2 monitoring status
+
+Read-only status adds `firewall`, `guard_fresh`, `guard_checked_at` and `guard_last_repair_at`. A guard observation older than 45 seconds is stale. Monitoring consumers must check timestamps and distinguish routing confirmation from fresh central-unit data.

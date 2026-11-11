@@ -49,7 +49,9 @@ if ($action !== 'status' && $action !== $current) {
     }
     $current = $action;
 }
+$guard=json_decode(@file_get_contents('/var/run/diagrallocal-guard.json')?:'null',true);
+$guard_last=is_array($guard)?($guard['checked_at']??0):0;
 $observed=diagral_observe();
 $verified=$current;
 if($current==='local' && (!$observed['alias_ready'] || $observed['cloud_ids'])) $verified='unknown';
-echo json_encode(['mode'=>$verified,'configured_mode'=>$current,'states_cleared'=>$killed,'active'=>$observed['active'],'alias_ready'=>$observed['alias_ready'],'direct_cloud_states'=>count($observed['cloud_ids']),'local_states'=>$observed['local_states']])."\n";
+echo json_encode(['mode'=>$verified,'configured_mode'=>$current,'states_cleared'=>$killed,'active'=>$observed['active'],'alias_ready'=>$observed['alias_ready'],'direct_cloud_states'=>count($observed['cloud_ids']),'local_states'=>$observed['local_states'],'firewall'=>gethostname(),'guard_fresh'=>$guard_last>0 && time()-$guard_last<45,'guard_checked_at'=>$guard_last,'guard_last_repair_at'=>(int)(@file_get_contents('/var/run/diagrallocal-last-repair')?:0)])."\n";

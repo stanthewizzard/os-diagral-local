@@ -1,6 +1,6 @@
 {
   "name": "os-diagral-local",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "origin": "opnsense/os-diagral-local",
   "comment": "Manual Diagral gateway routing",
   "desc": "Scoped TCP 6000 forwarding, native UI and routing API. No alarm commands.",
@@ -14,7 +14,7 @@
   "annotations": {
     "product_id": "os-diagral-local",
     "product_name": "diagral-local",
-    "product_version": "0.1.1",
+    "product_version": "0.1.2",
     "product_tier": "3",
     "product_abi": "26.7",
     "product_arch": "amd64"
