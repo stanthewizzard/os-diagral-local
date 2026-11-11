@@ -1,0 +1,4 @@
+<acl>
+<page-diagral-local><name>Services: Diagral Local configuration</name><patterns><pattern>ui/diagrallocal/*</pattern><pattern>api/diagrallocal/settings/*</pattern></patterns></page-diagral-local>
+<api-diagral-routing><name>Services: Diagral Local routing control</name><patterns><pattern>api/diagrallocal/service/*</pattern></patterns></api-diagral-routing>
+</acl>

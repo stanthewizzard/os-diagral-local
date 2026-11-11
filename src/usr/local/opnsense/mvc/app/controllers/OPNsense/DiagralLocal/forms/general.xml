@@ -1,0 +1,1 @@
+<form><field><id>diagral.general.interface</id><label>Gateway interface</label><type>dropdown</type></field><field><id>diagral.general.gateway_mac</id><label>Gateway MAC address</label><type>text</type></field><field><id>diagral.general.docker_ip</id><label>Local bridge IPv4 address</label><type>text</type></field></form>
